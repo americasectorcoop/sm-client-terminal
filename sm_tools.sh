@@ -25,30 +25,27 @@
 SM_PATH=~/.sourcemod
 
 for file in $SM_PATH/scripts/*.sh; do
-  source $file
+  . $file
 done
 
+CURRENT_GAME=$(sm_detect_game)
 
-function sm() {
-  CURRENT_GAME=$(sm_detect_game)
+export $(cat $SM_PATH/environments/$CURRENT_GAME.env | xargs)
 
-  export $(cat $SM_PATH/environments/$CURRENT_GAME.env | xargs)
-
-  sm_message "${COLOR_GREEN}SOURCEMOD CLIENT TOOLS\n"
-    
-  type=$1
+sm_message "\n${COLOR_GREEN}SOURCEMOD CLIENT TOOLS"
   
-  if [[ "${type}" =~ "compile" ]]; then
-    sm_compile
-    elif [[ "${type}" =~ "debug" ]]; then
-    sm_debug
-    elif [[ "${type}" =~ "deploy" ]]; then
-    sm_deploy
-    elif [[ "${type}" =~ "release" ]]; then
-    sm_release
-    elif [[ "{$type}" =~ "game" ]]; then 
-    sm_message "plugin game: ${COLOR_PURPLE}$CURRENT_GAME"
-  fi
+type=$1
 
-  sm_line_break
-}
+if [[ "${type}" =~ "compile" ]]; then
+  sm_compile
+  elif [[ "${type}" =~ "debug" ]]; then
+  sm_debug
+  elif [[ "${type}" =~ "deploy" ]]; then
+  sm_deploy
+  elif [[ "${type}" =~ "release" ]]; then
+  sm_release
+  elif [[ "{$type}" =~ "game" ]]; then 
+  sm_message "plugin game: ${COLOR_PURPLE}$CURRENT_GAME"
+fi
+
+sm_line_break

@@ -30,17 +30,19 @@ function sm_compile() {
     cd $directory
     # files edited
     files_edited=$(git status -s | cut -c 4- | grep -P ".sp$|.inc$")
-    compiler="$SM_PATH/spcomp64"
-    compile_path="$SM_PATH/compiled"
+    compiler="$SM_PATH/spcomp"
+    compile_path="$directory/compiled"
     
+    cp -R $directory/include $SM_PATH/
+
     files_compiled=()
     
     function compile_file() {
       local filename=$1
       if [[ ! "${files_compiled[@]}" =~ "${filename}" ]]; then
         sm_message "\ncompiling: ${COLOR_PURPLE}$filename\n"
-        path="$SM_PATH/$filename"
-        $compiler $path -D $compile_path -v 2 -i
+        path="$directory/$filename"
+        $compiler $path -D $compile_path -v 2 -;
         files_compiled+=($filename)
         sm_line_break
       fi
