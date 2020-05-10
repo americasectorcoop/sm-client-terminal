@@ -23,5 +23,25 @@
 # SOFTWARE.
 
 function sm_detect_game() {
-  echo "l4d2"
+  if [ -f "manifest.json" ]; then
+    echo $(cat "manifest.json" | jq -r ".game")
+  else
+    echo "undefined"
+  fi
+}
+
+function sm_project_type() {
+  if [ -f "manifest.json" ]; then
+    echo $(cat "manifest.json" | jq -r ".type")
+  else
+    echo "undefined"
+  fi
+}
+
+function sm_project_name() {
+  if [ -f "manifest.json" ]; then
+    echo $(cat "manifest.json" | jq -r ".name")
+  else
+    echo "undefined"
+  fi
 }

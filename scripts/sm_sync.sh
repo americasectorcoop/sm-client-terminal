@@ -1,19 +1,19 @@
 #!/bin/bash
 
 # MIT License
-# 
+#
 # Copyright (c) 2020 Alejandro Suárez
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -48,11 +48,33 @@ function sm_sync() {
 
 function sm_debug() {
   if git rev-parse --git-dir > /dev/null 2>&1; then
-    sm_message "updating compiled files to the server"
-    cd $(git rev-parse --show-toplevel)
-    local compile_path="$(pwd)/compiled"
+    sm_message "${COLOR_BLUE}updating compiled files to the server"
+    directory=$(git rev-parse --show-toplevel)
+
+    local project_name=$(sm_project_name)
+    local project_type=$(sm_project_type)
+
+    local compile_path="$directory/compiled"
+    local destiny_folder=$DEBUG_LOCAL_PATH/addons/sourcemod/plugins/$project_name
+
+    if [ -d "$destiny_folder" ]; then
+      rm -rf $destiny_folder
+    fi
+
+    mkdir $destiny_folder
+    
+    if [[ "${project_type}" == "full" ]]; then
+      # syncing up all the shit
+      rsync -a $directory/ $DEBUG_LOCAL_PATH --exclude $DEBUG_LOCAL_PATH/addons/sourcemod/scripting --exclude ".git"
+      # defining path 
+      compile_path="$directory/addons/sourcemod/scripting/compiled"
+    elif [[ "${project_type}" != "simple" ]]; then
+      sm_error "plugin type('$project_type') it's not valid"
+    fi
+
     cd $compile_path
-    cp -R * $DEBUG_LOCAL_PATH/addons/sourcemod/plugins
+    cp -R * $destiny_folder
+    
   else
     sm_message "the current directory is not a folder with git"
   fi

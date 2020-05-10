@@ -30,6 +30,11 @@ function sm_line_break() {
   printf "\n"
 }
 
+function sm_error() {
+  echo -e "${COLOR_RED}error: ${COLOR_RESTORE}$1${COLOR_RESTORE}"
+  exit
+}
+
 function str_replace() {
   # $1 search
   # $2 replace
