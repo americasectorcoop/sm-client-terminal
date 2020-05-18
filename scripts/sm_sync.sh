@@ -85,7 +85,7 @@ function sm_debug() {
 }
 
 function sm_release() {
-  sm_sync $PRODUCTION_REMOTE_USER $PRODUCTION_REMOVE_PATH
+  sm_sync $PRODUCTION_REMOTE_USER $PRODUCTION_REMOTE_PATH
 }
 
 function sm_deploy() {

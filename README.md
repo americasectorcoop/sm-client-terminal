@@ -23,3 +23,5 @@ Each environment defines the variables for your development environment.
 ### Plugin environments
 
 Variable settings define the type of game and plugin.
+
+### [To use, follow the next guide](https://github.com/draenorg/sm-client-terminal/wiki/Installation)
