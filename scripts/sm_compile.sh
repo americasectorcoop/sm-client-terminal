@@ -61,9 +61,10 @@ function sm_compile() {
       local filename=$1
       if [[ ! "${files_compiled[@]}" =~ "${filename}" ]]; then
         path="$directory/$filename"
-        local output=$($compiler $path -D $compile_path -v 2 -;)
+        local output=$($compiler $path -D $compile_path -v 2)
         if [[ "${output}" =~ "error" ]]; then
-          printf "\n${COLOR_RED}Error${COLOR_RESTORE} at ${COLOR_PURPLE}$filename${COLOR_RESTORE}\n\n$output\n\n";
+          local buffer=$(str_replace "$SM_PATH/include" "$include_path" "$output")
+          printf "\n${COLOR_RED}Error${COLOR_RESTORE} at ${COLOR_PURPLE}$filename${COLOR_RESTORE}\n\n$buffer\n\n";
         else
           files_compiled_success+=($filename)
         fi
