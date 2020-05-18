@@ -43,7 +43,7 @@ function sm_sync() {
     bye
   "
   
-  sm_message "sync succesfully:\n{$COLOR_GREEN}$DEBUG_LOCAL_PATH${COLOR_PURPLE} => ${COLOR_GREEN}$REMOTE_PATH"
+  sm_message "sync succesfully:\n$COLOR_GREEN$DEBUG_LOCAL_PATH${COLOR_PURPLE} => ${COLOR_GREEN}$REMOTE_PATH"
 }
 
 function sm_debug() {
@@ -51,11 +51,15 @@ function sm_debug() {
     sm_message "${COLOR_BLUE}updating compiled files to the server"
     directory=$(git rev-parse --show-toplevel)
 
+    cd $directory
+
     local project_name=$(sm_project_name)
     local project_type=$(sm_project_type)
 
     local compile_path="$directory/compiled"
     local destiny_folder=$DEBUG_LOCAL_PATH/addons/sourcemod/plugins/$project_name
+
+    mkdir -p $DEBUG_LOCAL_PATH/addons/sourcemod/plugins
 
     if [ -d "$destiny_folder" ]; then
       rm -rf $destiny_folder
@@ -65,7 +69,7 @@ function sm_debug() {
     
     if [[ "${project_type}" == "full" ]]; then
       # syncing up all the shit
-      rsync -a $directory/ $DEBUG_LOCAL_PATH --exclude $DEBUG_LOCAL_PATH/addons/sourcemod/scripting --exclude ".git"
+      rsync -a $directory/ $DEBUG_LOCAL_PATH --exclude ".git" --exclude "addons/sourcemod/plugins" --exclude "addons/sourcemod/scripting"
       # defining path 
       compile_path="$directory/addons/sourcemod/scripting/compiled"
     elif [[ "${project_type}" != "simple" ]]; then
