@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Methodmapizer for SourcePawn 1.7+
 # Replaces all native calls with their equivalent methodmap call.
 # By Peace-Maker, JoinedSenses
